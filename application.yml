@@ -1,8 +1,11 @@
 eureka:
   client:
+    registryFetchIntervalSeconds: 5  # default 30
     register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka/
   instance:
     prefer-ip-address: true
+    leaseRenewalIntervalInSeconds: 5  # default 30
+    leaseExpirationDurationInSeconds: 10 # default 90
