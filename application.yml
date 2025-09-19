@@ -9,3 +9,12 @@ eureka:
     prefer-ip-address: true
     leaseRenewalIntervalInSeconds: 5  # default 30
     leaseExpirationDurationInSeconds: 10 # default 90
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, shutdown
+  endpoint:
+    shutdown:
+      enabled: true
