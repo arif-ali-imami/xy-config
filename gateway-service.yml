@@ -5,7 +5,11 @@ spring:
         - id: booking-service
           uri: lb://BOOKING-SERVICE
           predicates:
-            - Path=/booking/**
+            - Path=/api/booking/**
+#          filters:
+#            - RewritePath=/api/booking/(?<segment>.*), /booking/${segment} # This is also same as below
+          filters:
+            - RewritePath=/api/(?<segment>.*), /${segment}
         - id: payment-service
           uri: lb://PAYMENT-SERVICE
           predicates:
@@ -19,9 +23,21 @@ spring:
           predicates:
             - Path=/auth/**
 
+
+gateway:
+  open-paths:
+    - /auth/login
+    - /public/**
+    - /api/v1/account/user/create
+
+
+jwt:
+  secret: gnr4ng458hjtg80459gh458g4580jg45rg
+
 logging:
   level:
+    root: info
     org.hibernate.SQL: DEBUG
-    org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.gateway: INFO
     org.springframework.http.server.reactive: DEBUG
     org.springframework.web.reactive: DEBUG
