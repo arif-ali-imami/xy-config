@@ -10,6 +10,10 @@ spring:
 #            - RewritePath=/api/booking/(?<segment>.*), /booking/${segment} # This is also same as below
           filters:
             - RewritePath=/api/(?<segment>.*), /${segment}
+            - name: CircuitBreaker
+              args:
+                name: gatewayLevelCircuitBreaker
+                fallbackUri: forward:/fallback/booking
         - id: payment-service
           uri: lb://PAYMENT-SERVICE
           predicates:
@@ -23,12 +27,12 @@ spring:
           predicates:
             - Path=/auth/**
 
-
 gateway:
   open-paths:
     - /auth/login
     - /public/**
     - /api/v1/account/user/create
+    - /actuator/**
 
 
 jwt:
