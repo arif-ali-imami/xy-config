@@ -1,4 +1,7 @@
 spring:
+  redis:
+    host: localhost
+    port: 6379
   cloud:
     gateway:
       routes:
@@ -10,10 +13,15 @@ spring:
 #            - RewritePath=/api/booking/(?<segment>.*), /booking/${segment} # This is also same as below
           filters:
             - RewritePath=/api/(?<segment>.*), /${segment}
-            - name: CircuitBreaker
-              args:
-                name: gatewayLevelCircuitBreaker
-                fallbackUri: forward:/fallback/booking
+#            - name: CircuitBreaker
+#              args:
+#                name: gatewayLevelCircuitBreaker
+#                fallbackUri: forward:/fallback/booking
+#            - name: RequestRateLimiter
+#              args:
+#                redis-rate-limiter.replenishRate: 5
+#                redis-rate-limiter.burstCapacity: 10
+#                key-resolver: "#{@ipKeyResolver}"
         - id: payment-service
           uri: lb://PAYMENT-SERVICE
           predicates:

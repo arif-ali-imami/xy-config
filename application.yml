@@ -47,5 +47,28 @@ resilience4j:
         eventConsumerBufferSize: 10
         automaticTransitionFromOpenToHalfOpenEnabled: true
         slidingWindowType: COUNT_BASED
-
-
+  retry:
+    instances:
+      userServiceRetry:
+        maxAttempts: 3
+        waitDuration: 2s
+        intervalFunction:
+          type: exponentialBackoff
+          initialInterval: 2s
+          multiplier: 2
+          maxInterval: 5s
+        retryExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.io.IOException
+        ignoreExceptions:
+          - org.springframework.web.client.HttpClientErrorException$NotFound
+#      gatewayLevelRetry:
+#        maxAttempts: 3
+#        waitDuration: 5s
+#        exponentialBackoffMultiplier: 2
+  rateLimiter:
+    instances:
+      userServiceRateLimiter:
+        limitForPeriod: 2 # no. of calls that are allowed during the refresh period. 2 api allowed in 1 second
+        limitRefreshPeriod: 1s # every given second time period refresh the limit
+        timeoutDuration: 0 # how many milli seconds to wait if reach limit. 0 means no wait, immediately reject.
