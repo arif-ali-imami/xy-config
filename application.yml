@@ -69,6 +69,20 @@ resilience4j:
   rateLimiter:
     instances:
       userServiceRateLimiter:
-        limitForPeriod: 2 # no. of calls that are allowed during the refresh period. 2 api allowed in 1 second
-        limitRefreshPeriod: 1s # every given second time period refresh the limit
+        limitForPeriod: 1 # no. of calls that are allowed during the refresh period. 2 api allowed in 1 second
+        limitRefreshPeriod: 2s # every given second time period refresh the limit
         timeoutDuration: 0 # how many milli seconds to wait if reach limit. 0 means no wait, immediately reject.
+  bulkhead:
+    instances:
+      userServiceSemaphoreBulkhead:
+        maxConcurrentCalls: 5 # How many concurrent calls are allowed
+        maxWaitDuration: 500ms # How many milliseconds to wait if reach maxConcurrentCalls. 0 means no wait, immediately reject.
+        fairCallHandling: true # Controls whether permits are granted in a FIFO (first-in-first-out) order
+      userServiceThreadPoolBulkhead:
+        coreThreadPoolSize: 10 # How many request execute immediately. These are always active threads.
+        maxThreadPoolSize: 20 # How many more threads can be created if core threads are busy and queue is full.
+        queueCapacity: 30 # How many requests can be queued when all core threads are busy.
+        keepAliveDuration: 1000ms # How long the extra threads (created after core thread and queue full) are kept alive when idle.
+        maxWaitDuration: 500ms # How many milliseconds to wait for a thread to become available. 0 means no wait, immediately reject.
+        registerHealthIndicator: true
+        writableStackTraceEnabled: true # Controls whether exceptions contain a full stack trace.
